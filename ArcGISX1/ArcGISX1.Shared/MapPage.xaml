@@ -1,0 +1,149 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:esriUI="clr-namespace:Esri.ArcGISRuntime.Xamarin.Forms;assembly=Esri.ArcGISRuntime.Xamarin.Forms"
+			 xmlns:local="clr-namespace:ArcGISX1.Shared;assembly=ArcGISX1"
+             x:Class="ArcGISX1.MapPage">
+	<ContentPage.Resources>
+		<ResourceDictionary>
+            <local:MapViewModel x:Key="MapViewModel" />
+            <Style x:Key="separator" TargetType="StackLayout">
+                <Setter Property="BackgroundColor" Value="DarkGray"></Setter>
+                <Setter Property="WidthRequest" Value="2"></Setter>
+            </Style>
+        </ResourceDictionary>
+	</ContentPage.Resources>
+	<Grid x:Name="GRID">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <!--harta este adaugata pe un grid-->
+        <esriUI:MapView x:Name="CurrentMapView"  Map="{Binding Map, Source={StaticResource MapViewModel}}"  Grid.Row="1" Grid.Column="0" GeoViewTapped="CurrentMapView_GeoViewTapped" >
+        </esriUI:MapView>
+        <!-- Butoane pentru navigare si pentru sincronizare -->
+        <AbsoluteLayout  Grid.Row="1" Grid.Column="0" HorizontalOptions="End"  VerticalOptions="Start">
+            <StackLayout Orientation="Horizontal">
+                <Button x:Name="minus" Text="-" CornerRadius="20" HeightRequest="40" WidthRequest="40" BackgroundColor="{Binding _button_color_minus}" Clicked="Button_Clicked_minus" >
+                </Button>
+                <Button x:Name="plus" Text="+" CornerRadius="20" HeightRequest="40" WidthRequest="40" BackgroundColor="{Binding _button_color_plus}" Clicked="Button_Clicked_plus" ></Button>
+                <Button x:Name="rotire" Text="֍" CornerRadius="20" HeightRequest="40" WidthRequest="40" BackgroundColor="{Binding _button_color_rot}" Clicked="Button_Clicked_rot" ></Button>
+                <Button x:Name="local" Text="L" CornerRadius="20" HeightRequest="40" WidthRequest="40" BackgroundColor="{Binding _button_color_loc}" TextColor="Yellow" Clicked="Button_Clicked_localAsync" IsEnabled="False" >
+                   <!--1 Trigger-->
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference local}, Path=IsEnabled}" Value="True">
+                            <Setter Property="BackgroundColor" Value="Green"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference local}, Path=IsEnabled}" Value="False">
+                            <Setter Property="BackgroundColor" Value="Gray"></Setter>
+                        </DataTrigger>
+                    </Button.Triggers>
+                    <!--1-->
+                </Button>
+                <Button x:Name="sincronizare" Text="S" CornerRadius="20" HeightRequest="40" WidthRequest="40" BackgroundColor="{Binding _button_color_sync}" TextColor="Yellow" Clicked="Button_Clicked_syncAsync" IsEnabled="False" >
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference sincronizare}, Path=IsEnabled}" Value="True">
+                            <Setter Property="BackgroundColor" Value="Red"></Setter>
+                        </DataTrigger>
+                        <DataTrigger TargetType="Button" Binding="{Binding Source={x:Reference sincronizare}, Path=IsEnabled}" Value="False">
+                            <Setter Property="BackgroundColor" Value="Gray"></Setter>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackLayout>
+
+         
+        </AbsoluteLayout>
+
+        <!-- progress bar -->
+        <ActivityIndicator x:Name="progres"  Grid.Row="1" Grid.Column="0" Color="IndianRed" IsRunning="false" HorizontalOptions="Center"  VerticalOptions="Center"/>
+      
+
+        <Frame  Grid.Row="0" Grid.Column="0" Padding="3">
+            <StackLayout>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Label Text="Grid" FontSize="Medium" Grid.Column="0" Grid.Row="0">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference onoff_ }, Path=IsToggled}" Value="True">
+                                <Setter Property="TextColor" Value="Yellow"></Setter>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    
+                    <Switch x:Name="onoff_" Grid.Column="1" Grid.Row="0" Toggled="onoff__Toggled"></Switch>
+                    <StackLayout VerticalOptions="FillAndExpand" Style="{StaticResource separator}"  Grid.Column="2" Grid.Row="0" Padding="0"></StackLayout>
+                    <Label Text="Mutati" FontSize="Medium" Grid.Column="3" Grid.Row="0" TextColor="DarkGray">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference onoff_Add}, Path=IsToggled}" Value="False">
+                                <Setter Property="TextColor" Value="Red"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference onoff_Add}, Path=IsToggled}" Value="True">
+                                <Setter Property="TextColor" Value="Gray"></Setter>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Switch x:Name="onoff_Add" Grid.Column="4" Grid.Row="0" Toggled="onoff__Toggled_add"></Switch>
+                    <Label Text="Adaugati" FontSize="Medium" Grid.Column="5" Grid.Row="0" TextColor="DarkGray">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference onoff_Add}, Path= IsToggled }" Value="True">
+                                <Setter Property="TextColor" Value="Red"></Setter>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference onoff_Add}, Path=IsToggled}" Value="False">
+                                <Setter Property="TextColor" Value="Gray"></Setter>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <StackLayout VerticalOptions="FillAndExpand"  Style="{StaticResource separator}"  Grid.Column="6" Grid.Row="0" Padding="0"></StackLayout>
+                    <Label Text="Tracking"  FontSize="Medium" Grid.Column="7" Grid.Row="0">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding Source={x:Reference tracking}, Path=IsToggled}" Value="True">
+                                <Setter Property="TextColor" Value="Yellow">
+                                </Setter>
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                    <Switch x:Name="tracking" Grid.Column="8" Grid.Row="0" HorizontalOptions="End" Toggled="tracking_Toggled" ></Switch>
+                </Grid>
+
+            </StackLayout>
+        </Frame>
+        <Frame  Grid.Row="2" Grid.Column="0" Padding="3">
+            <StackLayout>
+                <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                    <Label x:Name="Informatii" Text="{Binding Label_info, Source={StaticResource MapViewModel}}" TextColor="LightBlue" FontSize="Medium" Grid.Column="0" Grid.Row="0"></Label>
+                    <Button Text="1" CornerRadius="20" HeightRequest="25" WidthRequest="20"  Clicked="Button_Clicked_1"  Grid.Column="2" Grid.Row="0" TextColor="Orange"></Button>
+                    <Button Text="2" CornerRadius="20" HeightRequest="25" WidthRequest="20" Clicked="Button_Clicked" Grid.Column="3" Grid.Row="0" TextColor="Orange"></Button>
+                </Grid>
+            </StackLayout>
+        </Frame>
+
+    </Grid>
+</ContentPage>
