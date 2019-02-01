@@ -157,3 +157,13 @@ On the other hand, you can make customisation of the notifications:
                     notificare_symbol.Text = "Alerta!";
                 graphic_notify.Symbol = notificare_symbol;
             }
+
+For notification marker I used *Cross* Red symbol:
+
+            #region simbol alerta
+            SimpleMarkerSymbol cross_symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Red, 16);
+            SimpleFillSymbol buffer_symbol = new SimpleFillSymbol(SimpleFillSymbolStyle.Solid, Color.FromRgba(255, 255, 0, 0.5), null);
+            TextSymbol notificare_symbol = new TextSymbol("Alerta", Color.Black, 12, HorizontalAlignment.Right, VerticalAlignment.Top);
+            #endregion
+	    
+You can change marker symbol, buffer symbol and font dimension of map notification into simulator.cs class.
