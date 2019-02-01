@@ -158,7 +158,7 @@ On the other hand, you can make customisation of the notifications:
                 graphic_notify.Symbol = notificare_symbol;
             }
 
-For notification marker I used *Cross* Red symbol:
+For notification marker I used *Cross Red* symbol:
 
             #region simbol alerta
             SimpleMarkerSymbol cross_symbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Cross, Color.Red, 16);
